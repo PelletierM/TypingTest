@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "eslint:recommended", 
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2016
+  },
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "ignorePatterns": [
+    "app_package/static/gen/"
+  ]
+}
