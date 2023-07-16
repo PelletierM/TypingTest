@@ -1,9 +1,10 @@
 #Node
 node_modules/
 
-#Python environments
+#Python environment
 __pycache__/
 venv/
 
 #Generated files
 gen/
+.webassets-cache/
