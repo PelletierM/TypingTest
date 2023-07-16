@@ -1,3 +1,1 @@
-const ft = "apple";
-
-console.log(ft)
+/* Main typescript file */

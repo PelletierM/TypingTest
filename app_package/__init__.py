@@ -3,6 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 
+from flask_assets import Environment, Bundle
+from .utilities.assets import bundles
+
 db = SQLAlchemy()
 
 def create_app():
@@ -11,6 +14,10 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb+mariadbconnector://mysql:@localhost:3306/typingtest'
     # IMPORTANT : Secret key must be updated on production environment
     app.secret_key = b'randombytes'
+
+    assets = Environment(app)
+    assets.register(bundles)
+
     db.init_app(app)
 
     from .routes import routes
