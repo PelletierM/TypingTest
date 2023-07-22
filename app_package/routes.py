@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, json
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from .models import User
 from flask_login import login_user, logout_user, login_required
+from os import path
 
 routes = Blueprint("routes", __name__)
 
@@ -26,3 +27,9 @@ def signup():
     db.session.commit()
 
     return render_template("signup.html")
+
+@routes.route("/test/wordlist", methods=['POST'])
+def wordlist():
+    with open('/home/maxime/documents/github/typing-test/app_package/static/wordlists/french_weighted.json', 'r') as file:
+        words = json.load(file)
+        return json.dumps(words)
