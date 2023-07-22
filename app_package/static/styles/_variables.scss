@@ -1,1 +1,17 @@
-// Main variables
+// Color theme
+:root {
+    --color-background: rgb(50, 50, 50);
+    --color-text-main: rgb(211, 211, 211);
+    --color-text-test: rgb(117, 117, 117);
+    --color-text-incorrect: rgb(196, 88, 88);
+}
+
+$margin-standard: 1rem;
+$padding-standard: 1rem;
+$gap-standard: 1rem;
+
+$font-size-normal: 1rem;
+$font-size-small: 0.875rem;
+$font-size-large: 1.125rem;
+$font-light: 300;
+$font-bold: 600;
