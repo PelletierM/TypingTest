@@ -1,6 +1,6 @@
 import * as types from "./test.types"
 
-const amount: number = 25
+const amount: number = 50
 let fetchedObject: types.FetchedWordList
 let wordList: types.WordItem[]
 
@@ -64,6 +64,7 @@ export function updateWords() {
                 for (let j = 0; j < wordLen; j++) {
                     const newSpan = document.createElement("span")
                     newSpan.innerText = word[j]
+                    newSpan.classList.add("letter")
                     newDiv.appendChild(newSpan)
                 }
                 divWords.appendChild(newDiv)

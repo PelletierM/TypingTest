@@ -1,0 +1,27 @@
+div#test {
+    position: relative;
+    div#words {
+        width: Min(80vw, 50rem);
+        @include flex-justify-start;
+        flex-wrap: wrap;
+        gap: 1ch;
+        font-size: 1.25rem;
+        z-index: 1;
+        .word {
+            color: var(--color-text-test);
+            span.correct {
+                color: var(--color-text-main);
+            }
+            span.incorrect {
+                color: var(--color-text-incorrect);
+            }
+        }
+    }
+
+    input#test-input {
+        z-index: -1;
+        position: absolute;
+        top: 0%;
+        opacity: 0;
+    }
+}
