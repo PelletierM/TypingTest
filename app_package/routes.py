@@ -30,6 +30,6 @@ def signup():
 
 @routes.route("/test/wordlist", methods=['POST'])
 def wordlist():
-    with open('/home/maxime/documents/github/typing-test/app_package/static/wordlists/french_weighted.json', 'r') as file:
+    with open('/home/maxime/documents/github/typing-test/app_package/static/wordlists/french_weighted.json', 'r', encoding='utf-8') as file:
         words = json.load(file)
         return json.dumps(words)
