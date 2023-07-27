@@ -1,4 +1,5 @@
 import * as types from "./test.types"
+import { genCursor } from "./cursor"
 
 const amount: number = 50
 let fetchedObject: types.FetchedWordList
@@ -69,6 +70,7 @@ export function updateWords() {
                 }
                 divWords.appendChild(newDiv)
             }
+    genCursor()
     }
 }
 

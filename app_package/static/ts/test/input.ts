@@ -1,4 +1,6 @@
-let activeChar: Element
+import { updateCursor } from "./cursor"
+
+let activeChar: HTMLElement
 
 export function listenInput() {
     const inputField = document.querySelector("#test-input") as HTMLInputElement
@@ -12,9 +14,10 @@ export function listenInput() {
         const data = (e as InputEvent).data
         const target = (e as InputEvent).target as HTMLInputElement
         if (!activeChar) {
-            activeChar = ((document.querySelector("#words") as Element).firstChild as Element).firstChild as Element
+            activeChar = ((document.querySelector("#words") as HTMLElement).firstChild as HTMLElement).firstChild as HTMLElement
         }
         updateActiveChar(data, inputType);
+        updateCursor(activeChar)
         target.value = " ";
     })
 }
@@ -34,20 +37,20 @@ function checkWordEnd(): boolean {
 }
 
 function setNextWord() {
-    activeChar = ((activeChar.parentElement as Element).nextElementSibling as Element).firstChild as Element
+    activeChar = ((activeChar.parentElement as HTMLElement).nextElementSibling as HTMLElement).firstChild as HTMLElement
 }
 
 function setPreviousWord() {
-    if ((activeChar.parentElement as Element).previousElementSibling) {
-        const previousWordChar = Array.from(((activeChar.parentElement as Element).previousElementSibling as Element).querySelectorAll('.correct, .incorrect')).pop()
-        if (previousWordChar) activeChar = previousWordChar
-        if (activeChar.nextElementSibling) activeChar = activeChar.nextElementSibling
+    if ((activeChar.parentElement as HTMLElement).previousElementSibling) {
+        const previousWordChar = Array.from(((activeChar.parentElement as HTMLElement).previousElementSibling as HTMLElement).querySelectorAll('.correct, .incorrect')).pop()
+        if (previousWordChar) activeChar = previousWordChar as HTMLElement
+        if (activeChar.nextElementSibling) activeChar = activeChar.nextElementSibling as HTMLElement
     }
 }
 
 function setNextChar() {
     if (activeChar.nextElementSibling) {
-        activeChar = activeChar.nextElementSibling
+        activeChar = activeChar.nextElementSibling as HTMLElement
     }
 }
 
@@ -56,7 +59,7 @@ function setPreviousChar() {
         setPreviousWord()
         return
     }
-    activeChar = activeChar.previousElementSibling as Element
+    activeChar = activeChar.previousElementSibling as HTMLElement
 }
 
 function addExtraChar(data: string) {
