@@ -1,7 +1,7 @@
 import * as types from "./test.types"
 import { genCursor } from "./cursor"
 
-const amount: number = 50
+const amount: number = 150
 let fetchedObject: types.FetchedWordList
 let wordList: types.WordItem[]
 
@@ -20,7 +20,7 @@ export async function getWordList(url: string = "/test/wordlist", currentList: s
         updateWords()
     })
     .catch(() => {
-    throw new Error("Wordlist JSON fetch failed")
+    throw new Error("Wordlist fetch failed")
     })
 }
 
@@ -56,20 +56,19 @@ export function updateWords() {
     const divWords = document.querySelector("#words")
     const words: string[] = generateWords(amount)
     if (divWords) {
-        for (let i = 0; i < amount; i++)
-            {
-                const newDiv = document.createElement("div")
-                newDiv.classList.add("word")
-                const word: string = words[i]
-                const wordLen: number = word.length
-                for (let j = 0; j < wordLen; j++) {
-                    const newSpan = document.createElement("span")
-                    newSpan.innerText = word[j]
-                    newSpan.classList.add("letter")
-                    newDiv.appendChild(newSpan)
-                }
-                divWords.appendChild(newDiv)
+        for (let i = 0; i < amount; i++) {
+            const newDiv = document.createElement("div")
+            newDiv.classList.add("word")
+            const word: string = words[i]
+            const wordLen: number = word.length
+            for (let j = 0; j < wordLen; j++) {
+                const newSpan = document.createElement("span")
+                newSpan.innerText = word[j]
+                newSpan.classList.add("letter")
+                newDiv.appendChild(newSpan)
             }
+            divWords.appendChild(newDiv)
+        }
     genCursor()
     }
 }
