@@ -9,6 +9,7 @@ export function genCursor() {
 }
 
 export function updateCursor(element: HTMLElement) {
+    stopCursorBlinking()
     cursor.style.top = `${element.offsetTop + element.offsetHeight}px`
     if (element.matches(".correct, .incorrect")) {
         cursor.style.left = `${element.offsetLeft + element.offsetWidth}px`
@@ -16,3 +17,18 @@ export function updateCursor(element: HTMLElement) {
     }
     cursor.style.left = `${element.offsetLeft}px`
 }
+
+const stopCursorBlinking = (function () {
+    let previousID: ReturnType<typeof setTimeout>
+    
+    function inner() {
+        if (previousID) {
+            clearTimeout(previousID)
+        }
+        cursor.classList.add("active")
+        previousID = setTimeout(() => {
+            cursor.classList.remove("active")
+        }, 250)
+    }
+    return inner
+})()

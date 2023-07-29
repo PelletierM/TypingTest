@@ -19,4 +19,8 @@ div#cursor {
     animation-name: cursorBlinking;
     animation-duration: 1s;
     animation-iteration-count: infinite;
+
+    &.active {
+        animation: none;
+    }
 }
