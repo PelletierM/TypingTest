@@ -1,4 +1,5 @@
 import { updateCursor } from "./cursor"
+import { startTimer } from "../stats/timer"
 
 let activeChar: HTMLElement
 
@@ -15,6 +16,7 @@ export function listenInput() {
         const target = (e as InputEvent).target as HTMLInputElement
         if (!activeChar) {
             activeChar = ((document.querySelector("#words") as HTMLElement).firstChild as HTMLElement).firstChild as HTMLElement
+            startTimer(60)
         }
         updateActiveChar(data, inputType);
         updateCursor(activeChar)
