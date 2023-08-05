@@ -1,34 +1,41 @@
+import * as types from "./test.types"
 import { updateCursor } from "./cursor"
 import { startTimer } from "../stats/timer"
-import * as testStats from "../stats/test-stats"
 
 let activeChar: HTMLElement
 
-export function listenInput() {
-    const test = new testStats.Test("time60")
-    const inputStats = new testStats.InputStats
-
+export function listenInput(testStats: types.testStats) {
     const inputField = document.querySelector("#test-input") as HTMLInputElement
+    
+    // Listener for input focus
     const testContainer = document.querySelector("#test")
     testContainer?.addEventListener("focusin", function(e){
         e.preventDefault
         inputField.focus()
     })
-    inputField?.addEventListener("input", function(e) {
+
+    // Listener for typed inputs
+    inputField?.addEventListener("input", function inputListener(e) {
+        if (testStats.state === "completed") {
+            inputField.removeEventListener("input", inputListener)
+            return
+        }
+        if (testStats.state === "inactive") startTest(testStats, inputField, inputListener)
+
         const inputType = (e as InputEvent).inputType
         const data = (e as InputEvent).data
-        const target = (e as InputEvent).target as HTMLInputElement
-        if (!activeChar) {
-            activeChar = ((document.querySelector("#words") as HTMLElement).firstChild as HTMLElement).firstChild as HTMLElement
-            inputStats.startTime = Date.now()
-            startTimer(60)
-        }
-        inputStats.updateInputCounts(updateActiveChar(data, inputType)); // This has to come before updateWordState
-        updateWordState(activeChar) // This has to come before updateStats
-        inputStats.updateStats(activeChar)
-        test.update(inputStats)
+
+        testStats.inputStats.updateInputCounts(updateActiveChar(data, inputType));
+        updateWordState(activeChar) 
+        testStats.inputStats.updateStats(activeChar)
+
         updateCursor(activeChar)
-        updateHTMLStats(test)
+
+        testStats.updateAccuracy()
+        updateHTMLAccuracy(testStats)
+        
+        // reset input field value to single space
+        const target = (e as InputEvent).target as HTMLInputElement        
         target.value = " ";
     })
 }
@@ -91,7 +98,6 @@ function deleteExtraChar() {
 
 function updateActiveChar(data: string | null, inputType: string): string {
     let returnValue = "invalid"
-
     if (checkForbiddenInput(inputType)) return returnValue
 
     if (inputType == "deleteContentBackward") {
@@ -175,8 +181,40 @@ function getPartialWordState(word: HTMLElement) {
     }
 }
 
-function updateHTMLStats(object: testStats.Test) {
+function updateHTMLAccuracy(object: types.testStats) {
+    (document.querySelector("#accuracy") as HTMLElement).innerText = `${Math.round(object.accuracy * 100)}`;
+}
+
+function updateHTMLWpm(object: types.testStats) {
     (document.querySelector("#wpm") as HTMLElement).innerText = `${Math.round(object.wpm)}`;
     (document.querySelector("#raw-wpm") as HTMLElement).innerText = `${Math.round(object.rawWpm)}`;
-    (document.querySelector("#accuracy") as HTMLElement).innerText = `${Math.round(object.accuracy * 100)}`;
+}
+
+function startTest(object: types.testStats, field: HTMLElement, listener: EventListener) {
+    activeChar = ((document.querySelector("#words") as HTMLElement).firstChild as HTMLElement).firstChild as HTMLElement
+    object.state = "active"
+    object.inputStats.startTime = Date.now()
+    startTimer(object.time)
+    startStatsUpdate(object)
+    setTimeout(() => endTest(object, field, listener), object.time * 1000)
+}
+
+function endTest(object: types.testStats, field: HTMLElement, listener: EventListener) {
+    object.inputStats.endTime = ((object.time * 1000) + object.inputStats.startTime)
+    object.updateAccuracy()
+    object.updateWpm()
+    object.state = "completed"
+    field.removeEventListener("input", listener)
+}
+
+function startStatsUpdate(object: types.testStats) {
+    (function innerFunc() {
+        if (object.state === "completed") return
+        setTimeout(() => {
+            object.inputStats.updateStats(activeChar)
+            object.updateWpm()
+            updateHTMLWpm(object)
+            innerFunc()
+        }, 1000)
+    })()
 }

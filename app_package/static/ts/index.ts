@@ -1,6 +1,7 @@
 /* Main typescript file */
-import * as test from "./test/init-test"
 import * as stats from "./stats/init-stats"
+import * as test from "./test/init-test"
 
-test.initTest()
-stats.initStats()
+
+const testStats = stats.initStats("time15", 15)
+test.initTest(testStats)
