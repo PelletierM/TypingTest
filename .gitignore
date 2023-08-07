@@ -8,3 +8,6 @@ venv/
 #Generated files
 gen/
 .webassets-cache/
+
+#config info
+production/
