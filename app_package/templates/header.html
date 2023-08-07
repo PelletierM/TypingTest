@@ -1,3 +1,7 @@
 <header>
-    This is the header
+    {% if is_logged_in %}
+        Welcome {{ username }}!
+    {% else %}
+        Welcome stranger!
+    {% endif %}
 </header>

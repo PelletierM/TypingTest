@@ -1,4 +1,23 @@
-/* include register, login and logout forms in this file */
+<!-- include register, login and logout forms in this file -->
 <div>
+    {% if is_logged_in %}
+        <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <form action="/register" method="post">
+            <input type="text" autocomplete="off" id="username" name="username" placeholder="Username">
+            <input type="email" autocomplete="off" id="email" name="email" placeholder="Email">
+            <input type="password" autocomplete="off" id="password" name="password" placeholder="Password">
+            <input type="password" autocomplete="off" id="confirmation" name="confirmation" placeholder="Confirm password">
+            <button type="submit">Register</button>
+        </form>
 
+        <form action="/login" method="post">
+            <input type="text" autocomplete="off" id="username" name="username" placeholder="Username">
+            <input type="password" autocomplete="off" id="password" name="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+    {% endif %}
 </div>
+
