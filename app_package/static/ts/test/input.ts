@@ -55,12 +55,12 @@ function checkWordEnd(): boolean {
 }
 
 function setNextWord() {
-    activeChar = ((activeChar.parentElement as HTMLElement).nextElementSibling as HTMLElement).firstChild as HTMLElement
+    activeChar = activeChar.parentElement?.nextElementSibling?.firstChild as HTMLElement
 }
 
 function setPreviousWord() {
-    if ((activeChar.parentElement as HTMLElement).previousElementSibling) {
-        const previousWordChar = Array.from(((activeChar.parentElement as HTMLElement).previousElementSibling as HTMLElement).querySelectorAll('.correct, .incorrect')).pop()
+    if (activeChar.parentElement?.previousElementSibling) {
+        const previousWordChar = Array.from(activeChar.parentElement?.previousElementSibling?.querySelectorAll('.correct, .incorrect')).pop()
         if (previousWordChar) activeChar = previousWordChar as HTMLElement
         if (activeChar.nextElementSibling) activeChar = activeChar.nextElementSibling as HTMLElement
     }
@@ -143,8 +143,8 @@ function updateWordState(char: HTMLElement) {
     if (checkWordEnd() && char.matches(".correct, .incorrect")) {
         getFullWordState(char.parentElement as HTMLElement)
     }
-    else if (checkWordStart() && (char.parentElement as HTMLElement).previousElementSibling) {
-        getFullWordState((char.parentElement as HTMLElement).previousElementSibling as HTMLElement)
+    else if (checkWordStart() && char.parentElement?.previousElementSibling) {
+        getFullWordState(char.parentElement?.previousElementSibling as HTMLElement)
     }
     else getPartialWordState(char.parentElement as HTMLElement)
 }
@@ -191,7 +191,7 @@ function updateHTMLWpm(object: types.testStats) {
 }
 
 function startTest(object: types.testStats, field: HTMLElement, listener: EventListener) {
-    activeChar = ((document.querySelector("#words") as HTMLElement).firstChild as HTMLElement).firstChild as HTMLElement
+    activeChar = (document.querySelector("#words") as HTMLElement).firstChild?.firstChild as HTMLElement
     object.state = "active"
     object.inputStats.startTime = Date.now()
     startTimer(object.time)

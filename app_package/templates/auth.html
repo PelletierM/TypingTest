@@ -1,23 +1,44 @@
-<!-- include register, login and logout forms in this file -->
-<div>
+<div id="auth">
     {% if is_logged_in %}
         <form action="/logout" method="post">
             <button type="submit">Logout</button>
         </form>
     {% else %}
-        <form action="/register" method="post">
-            <input type="text" autocomplete="off" id="username" name="username" placeholder="Username">
-            <input type="email" autocomplete="off" id="email" name="email" placeholder="Email">
-            <input type="password" autocomplete="off" id="password" name="password" placeholder="Password">
-            <input type="password" autocomplete="off" id="confirmation" name="confirmation" placeholder="Confirm password">
-            <button type="submit">Register</button>
-        </form>
-
-        <form action="/login" method="post">
-            <input type="text" autocomplete="off" id="username" name="username" placeholder="Username">
-            <input type="password" autocomplete="off" id="password" name="password" placeholder="Password">
-            <button type="submit">Login</button>
-        </form>
+        <button class="register-login">Register / Login</button>
+        <div class="modal">
+            <div>
+                <div class="auth-selectors">
+                    <div class="auth-selected"></div>
+                    <span class="login-selector active">login</span>
+                    <span class="register-selector">register</span>
+                </div>
+                <div class="form-container login">
+                    <form action="/login" method="post" novalidate>
+                        <div class="form-input first">
+                            <label for="username">username</label>
+                            <input type="text" autocomplete="off" id="username" name="username" placeholder="" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-input second">
+                            <label for="email">email</label>
+                            <input type="email" autocomplete="off" id="email" name="email" placeholder="" disabled required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-input third">
+                            <label for="password">password</label>
+                            <input type="password" autocomplete="off" id="password" name="password" placeholder="" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-input fourth">
+                            <label for="confirmation">confirm password</label>
+                            <input type="password" autocomplete="off" id="confirmation" name="confirmation" placeholder="" disabled required>
+                            <span class="error-message"></span>
+                        </div>
+                        <button type="submit">let's type!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endif %}
 </div>
 

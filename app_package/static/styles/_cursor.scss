@@ -14,7 +14,7 @@ div#cursor {
     position: absolute;
     width: 1ch;
     height: 1px;
-    background-color: var(--color-text-main);
+    background-color: var(--color-text-accent);
     transition: 0.1s;
     animation-name: cursorBlinking;
     animation-duration: 1s;

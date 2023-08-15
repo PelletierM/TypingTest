@@ -9,3 +9,36 @@
     justify-content: flex-start;
     align-items: center;
 }
+
+@mixin flex-justify-space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin button-overwrite {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: transparent;
+    border: none;
+    color: var(--color-text-main);
+    transition: var(--transition-time-standard);
+    &:hover {
+        color: var(--color-text-accent);
+    }    
+}
+
+@mixin button-main {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: var(--color-text-main);
+    color: var(--color-background);
+    &:hover {
+        background-color: var(--color-text-accent);
+        color: var(--color-text-main)
+    }
+}
+
+@mixin box-shadow-standard {
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.2);
+}

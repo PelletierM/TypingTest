@@ -2,5 +2,5 @@ header {
     height: 5rem;
     width: 100%;
     background-color: black;
-    @include flex-center;
+    @include flex-justify-space-between;
 } 

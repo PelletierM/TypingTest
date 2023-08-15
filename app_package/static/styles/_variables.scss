@@ -2,8 +2,17 @@
 :root {
     --color-background: rgb(50, 50, 50);
     --color-text-main: rgb(211, 211, 211);
+    --color-text-accent:rgb(55, 144, 133);
     --color-text-test: rgb(117, 117, 117);
     --color-text-incorrect: rgb(196, 88, 88);
+    --color-modal: rgba(0, 0, 0, 0.75);
+
+    --transition-time-standard: 0.25s;
+    --transition-time-fast: 0.1s;
+
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-bold: 600;
 }
 
 $margin-standard: 1rem;

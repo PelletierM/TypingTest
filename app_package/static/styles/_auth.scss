@@ -1,0 +1,285 @@
+#auth {
+    button {
+        @include button-overwrite
+    }
+    >.modal {
+       @include flex-center;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0%;
+        right: 0%;
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0;
+        transition: var(--transition-time-standard);
+        background-color: var(--color-modal);
+
+        &.active {
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        >div {
+            background-color: var(--color-background);
+            display: grid;
+            grid-template-rows: 4rem 1fr;
+            grid-template-columns: 1fr;
+            border-radius: 1rem;
+            min-height: Min(60vh, 27rem);
+            width: Min(80vw, 18rem);
+            z-index: 1;
+            overflow: hidden;
+
+            >.auth-selectors {
+                grid-row: 1 / 2;
+                grid-column: 1 / 2;
+                align-self: end;
+                justify-self: center;
+                width: 60%;
+                height: 2rem;
+                border-radius: 1rem;
+                background-color: rgba(255, 255, 255, 0.1);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr;
+
+                pointer-events: none;
+                transition: var(--transition-time-standard);
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+
+                .auth-selected {
+                    background-color: var(--color-text-main);
+                    grid-row: 1 / 2;
+                    grid-column: 1 / 2;
+                    transition: var(--transition-time-standard);
+                    z-index: 0;
+                    border-radius: 1rem;
+
+                    &.translated {
+                    transform: translateX(Min(calc(40vw * 0.60), calc(9rem * 0.60)));
+                }
+
+                } 
+                .login-selector, .register-selector {
+                    cursor: default;
+                    grid-row: 1 / 2;
+                    font-size: 0.8125rem;
+                    pointer-events: auto;
+                    @include flex-center;
+                    z-index: 1;
+
+                    &.active {
+                        pointer-events: none;
+                        color: var(--color-background);
+                    }
+                }
+
+                .login-selector {
+                    grid-column: 1 / 2;
+                }
+                .register-selector {
+                    grid-column: 2 / 3;
+                }
+                .active:hover {
+                    background-color: transparent;
+                }
+            }        
+
+            >.form-container {
+                grid-row: 2 / 3;
+                grid-column: 1 / 2;
+                padding: 2rem;
+                padding-top: 1rem;
+                @include flex-center;
+                background-color: var(--color-background);
+            }
+        }
+    }
+}
+
+#auth form {
+    display: grid;
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+
+    .form-input {
+        color: var(--color-text-main);
+        width: 100%;
+        height: 20%;
+        position: absolute;
+        transition: var(--transition-time-fast);
+        
+        .error-message {
+            position: absolute;
+            top: calc(105% + 0.25rem);
+            font-size: 0.6875rem;
+            color: var(--color-text-incorrect);
+            opacity: 0;
+            transition: var(--transition-time-fast);
+        }
+
+        &.invalid {
+            color: var(--color-text-incorrect);
+
+            &::after {
+                background-color: var(--color-text-incorrect);
+            }        
+
+            .error-message {
+                opacity: 1;
+            }
+        }    
+
+        &::after,
+        &::before {
+        content: "";
+        position: absolute;
+        top: 105%;
+        height: 1px;
+        align-self: flex-start;
+        }
+
+        &::before {
+            background-color: var(--color-text-test);
+            width: 100%;
+            z-index: 1;
+        }
+
+        &::after {
+            transition: var(--transition-time-standard);
+            background-color: var(--color-text-main);
+            width: 0%;
+            z-index: 2;
+        }
+
+        &:hover::after,
+        &.in-focus::after {
+            width: 100%;
+        }
+
+        label {
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 400;
+            color: var(--color-text-test);
+            min-height: 1rem;
+            position: absolute;
+            bottom: 0px;
+            z-index: 1;
+            transition: var(--transition-time-standard);
+        }
+
+        label.is-active {
+            bottom: 1.125rem;
+            transition: all var(--transition-time-standard), color var(--transition-time-fast);
+            transform: scale(0.8125) translateX(-12.5%);
+            color: inherit;
+        }
+
+        input {
+            position: absolute;
+            bottom: 0px;
+            font-family: inherit;
+            font-size: inherit;
+            background-color: transparent;
+            border: none;
+            color: inherit;
+            outline: none;
+            z-index: 2;
+        }
+    }
+    button {
+        @include button-main;
+        position: absolute;
+        width: 9rem;
+        height: 2.25rem;
+        border-radius: 1rem;
+    }
+}
+
+#auth .form-container {
+    .form-input {
+        transition: var(--transition-time-standard);
+    }
+
+    .form-input.first {
+        bottom: 85%;
+    }
+    .form-input.second {
+        bottom: 65%;
+        transition: var(--transition-time-standard);
+    }
+    .form-input.third {
+        bottom: 45%;
+    }
+    .form-input.fourth {
+        bottom: 25%;
+        transition: var(--transition-time-standard);
+    }
+
+    button {
+        transition: var(--transition-time-standard);
+    }
+    
+    &.login button {
+        bottom: 25%;
+    }
+    &.register button {
+        bottom: 0%;
+    }
+
+    &.login {
+        .form-input.first {
+            bottom: 65%;
+        }
+
+        .form-input.second {
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .form-input.fourth {
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .submit-register {
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .submit-login {
+            pointer-events: all;
+            z-index: 1;
+        }
+    }
+    &.register {
+        .form-input.second {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 1;
+        }
+
+        .form-input.fourth {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 1;
+        }
+
+        .submit-register {
+            pointer-events: all;
+            z-index: 1;
+        }
+
+        .submit-login {
+            pointer-events: none;
+            z-index: 0;
+        }
+    }
+}
