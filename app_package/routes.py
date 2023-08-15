@@ -78,8 +78,8 @@ def register():
             login_user(user, remember=True)
             flash("User created.", category="success")
             return redirect(url_for("routes.index"))
-
-    return render_template("base.html")
+        return render_template("base.html")
+    return redirect(url_for("routes.index"))
 
 @routes.route("/confirm/<token>")
 @login_required
@@ -116,6 +116,10 @@ def login():
                 flash("Password is incorrect.", category="error")
         else :
             flash("Username does not exist.", category="error")
+    return redirect(url_for("routes.index"))
+    
+
+
 
 @routes.route("/logout", methods=["GET", "POST"])
 @login_required
