@@ -26,9 +26,9 @@ export async function getWordList(url: string = "/test/wordlist", currentList: s
 
 function sortFetched(fetchedObject: types.FetchedWordList): types.WordItem[] {
     const sortedList:types.WordItem[] = []
-        for (const key in fetchedObject) {
-            sortedList.push([key, fetchedObject[key]])
-        }
+    for (const key in fetchedObject) {
+        sortedList.push([key, fetchedObject[key]])
+    }
     sortedList.sort(function(a:types.WordItem, b:types.WordItem): number {
         return a[1] - b[1];
     })
@@ -56,6 +56,7 @@ export function updateWords() {
     const divWords = document.querySelector("#words")
     const words: string[] = generateWords(amount)
     if (divWords) {
+        divWords.innerHTML = "";
         for (let i = 0; i < amount; i++) {
             const newDiv = document.createElement("div")
             newDiv.classList.add("word")

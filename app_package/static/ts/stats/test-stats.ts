@@ -6,7 +6,7 @@ export class TestStats implements types.testStats {
     wpm: number
     rawWpm: number
     accuracy: number
-    state: "inactive" | "active" | "completed"
+    state: "inactive" | "active" | "completed" | "aborted"
     inputStats: types.inputStats
 
     constructor(type: string, time: number = 0, stats: types.inputStats = new InputStats) {
@@ -35,6 +35,7 @@ export class InputStats implements types.inputStats {
     wpmStats: types.wpmStats
     startTime: number
     endTime: number
+    timerID: ReturnType<typeof setInterval> | undefined
 
     constructor(startTime: number = Date.now()) {
         this.correctInput = 0
@@ -47,6 +48,7 @@ export class InputStats implements types.inputStats {
         }
         this.startTime = startTime
         this.endTime = startTime + 1
+        this.timerID = undefined
     }
 
     updateInputCounts(inputValidity: string) {
@@ -127,10 +129,10 @@ function getPreviousChar(char: HTMLElement): HTMLElement | undefined {
     if (char.previousElementSibling) {
         return char.previousElementSibling as HTMLElement
     } 
-    else if ((char.parentElement as HTMLElement).previousElementSibling) {
+    if ((char.parentElement as HTMLElement).previousElementSibling) {
         return Array.from(((char.parentElement as HTMLElement).previousElementSibling as HTMLElement).querySelectorAll('.correct, .incorrect')).pop() as HTMLElement
     } 
-    else return undefined
+    return undefined
 }
 
 function checkCorrectSpace(previousChar: HTMLElement): string | undefined {

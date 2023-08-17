@@ -4,7 +4,7 @@ export interface testStats {
     wpm: number
     rawWpm: number
     accuracy: number
-    state: "inactive" | "active" | "completed"
+    state: "inactive" | "active" | "completed" | "aborted"
     inputStats: inputStats
     updateAccuracy: () => void
     updateWpm: () => void
@@ -16,6 +16,7 @@ export interface inputStats {
     wpmStats: wpmStats
     startTime: number
     endTime: number
+    timerID: ReturnType<typeof setInterval> | undefined
     updateInputCounts: (arg0: string) => void
     updateStats: (arg0: HTMLElement) => void
 }

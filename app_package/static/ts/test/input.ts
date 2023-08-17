@@ -1,42 +1,39 @@
 import * as types from "./test.types"
 import { updateCursor } from "./cursor"
 import { startTimer } from "../stats/timer"
+import { currentTest } from "../index"
 
-let activeChar: HTMLElement
+let activeChar: HTMLElement | null
 
-export function listenInput(testStats: types.testStats) {
+export function listenInput() {
     const inputField = document.querySelector("#test-input") as HTMLInputElement
-    
-    // Listener for input focus
     const testContainer = document.querySelector("#test")
-    testContainer?.addEventListener("focusin", function(e){
-        e.preventDefault
-        inputField.focus()
-    })
 
-    // Listener for typed inputs
-    inputField?.addEventListener("input", function inputListener(e) {
-        if (testStats.state === "completed") {
-            inputField.removeEventListener("input", inputListener)
+    function inputListener(e: Event) {
+        if (currentTest.testStats.state == "completed" || currentTest.testStats.state == "aborted") {
             return
         }
-        if (testStats.state === "inactive") startTest(testStats, inputField, inputListener)
+        if (currentTest.testStats.state === "inactive") {
+            activeChar = (document.querySelector("#words") as HTMLElement).firstChild?.firstChild as HTMLElement
+            startTest(currentTest.testStats)
+        }
 
         const inputType = (e as InputEvent).inputType
         const data = (e as InputEvent).data
 
-        testStats.inputStats.updateInputCounts(updateActiveChar(data, inputType));
-        updateWordState(activeChar) 
-        testStats.inputStats.updateStats(activeChar)
+        currentTest.testStats.inputStats.updateInputCounts(updateActiveChar(data, inputType));
+        updateWordState(activeChar as HTMLElement) 
+        currentTest.testStats.inputStats.updateStats(activeChar as HTMLElement)
+        updateCursor(activeChar as HTMLElement)
+        currentTest.testStats.updateAccuracy()
+        updateHTMLAccuracy(currentTest.testStats)
+        inputField.value = " ";
+    }
 
-        updateCursor(activeChar)
-
-        testStats.updateAccuracy()
-        updateHTMLAccuracy(testStats)
-        
-        // reset input field value to single space
-        const target = (e as InputEvent).target as HTMLInputElement        
-        target.value = " ";
+    inputField.addEventListener("input", inputListener)
+    testContainer?.addEventListener("focusin", function(e){
+        e.preventDefault
+        inputField.focus()
     })
 }
 
@@ -47,19 +44,19 @@ function checkForbiddenInput(inputType: string): boolean {
 }
 
 function checkWordStart(): boolean {
-    return !activeChar.previousElementSibling
+    return !activeChar?.previousElementSibling
 }
 
 function checkWordEnd(): boolean {
-    return !activeChar.nextElementSibling
+    return !activeChar?.nextElementSibling
 }
 
 function setNextWord() {
-    activeChar = activeChar.parentElement?.nextElementSibling?.firstChild as HTMLElement
+    activeChar = activeChar?.parentElement?.nextElementSibling?.firstChild as HTMLElement
 }
 
 function setPreviousWord() {
-    if (activeChar.parentElement?.previousElementSibling) {
+    if (activeChar?.parentElement?.previousElementSibling) {
         const previousWordChar = Array.from(activeChar.parentElement?.previousElementSibling?.querySelectorAll('.correct, .incorrect')).pop()
         if (previousWordChar) activeChar = previousWordChar as HTMLElement
         if (activeChar.nextElementSibling) activeChar = activeChar.nextElementSibling as HTMLElement
@@ -67,7 +64,7 @@ function setPreviousWord() {
 }
 
 function setNextChar() {
-    if (activeChar.nextElementSibling) {
+    if (activeChar?.nextElementSibling) {
         activeChar = activeChar.nextElementSibling as HTMLElement
     }
 }
@@ -77,20 +74,20 @@ function setPreviousChar() {
         setPreviousWord()
         return
     }
-    activeChar = activeChar.previousElementSibling as HTMLElement
+    activeChar = activeChar?.previousElementSibling as HTMLElement
 }
 
 function addExtraChar(data: string) {
     const extraChar = document.createElement("span")
     extraChar.classList.add("letter", "extra", "incorrect")
     extraChar.innerText = data as string
-    activeChar.parentElement?.appendChild(extraChar)
+    activeChar?.parentElement?.appendChild(extraChar)
     setNextChar()
 }
 
 function deleteExtraChar() {
     setPreviousChar()
-    const nextElement = activeChar.nextElementSibling
+    const nextElement = activeChar?.nextElementSibling
     if (nextElement && nextElement.matches(".extra")) {
         nextElement.remove()
     }
@@ -98,43 +95,47 @@ function deleteExtraChar() {
 
 function updateActiveChar(data: string | null, inputType: string): string {
     let returnValue = "invalid"
-    if (checkForbiddenInput(inputType)) return returnValue
+
+    if (checkForbiddenInput(inputType)) {
+        return returnValue
+    }
 
     if (inputType == "deleteContentBackward") {
         returnValue = "backspace"
-        if (!(checkWordEnd() && activeChar.matches(".correct, .incorrect"))) {
+        if (!(checkWordEnd() && activeChar?.matches(".correct, .incorrect"))) {
             setPreviousChar()
             if (checkWordEnd()) return returnValue
         }
-        if (activeChar.matches(".extra")) {
+        if (activeChar?.matches(".extra")) {
             deleteExtraChar()
             return returnValue
         }
-        activeChar.classList.remove("correct", "incorrect")
+        activeChar?.classList.remove("correct", "incorrect")
         return returnValue
     }
 
     if (data == " ") {
-        if (!checkWordStart() || (activeChar.parentElement?.innerText.length == 1 && activeChar.matches(".correct, .incorrect"))) {
+        if (!checkWordStart() || (activeChar?.parentElement?.innerText.length == 1 && activeChar.matches(".correct, .incorrect"))) {
             returnValue = "correct"
-            if (!(checkWordEnd() && activeChar.matches(".correct, .incorrect"))) returnValue = "incorrect"
+            if (!(checkWordEnd() && activeChar?.matches(".correct, .incorrect"))) returnValue = "incorrect"
             setNextWord()
         }
         return returnValue
     }
 
-    if (data == activeChar.innerHTML && !activeChar.matches(".correct, .incorrect")) {
-        activeChar.classList.add("correct")
+    if (data == activeChar?.innerHTML && !activeChar?.matches(".correct, .incorrect")) {
+        activeChar?.classList.add("correct")
         returnValue = "correct"
     }
     else {
         returnValue = "incorrect"
-        if (checkWordEnd() && activeChar.matches(".correct, .incorrect")) {
+        if (checkWordEnd() && activeChar?.matches(".correct, .incorrect")) {
             addExtraChar(data as string)
             return returnValue
         }
-        activeChar.classList.add("incorrect")
+        activeChar?.classList.add("incorrect")
     }
+
     setNextChar()
     return returnValue
 }
@@ -153,6 +154,7 @@ function getFullWordState(word: HTMLElement) {
     const wordChars = word.children
     const wordLen = wordChars.length
     let correctCharsCount = 0
+
     for (let i = 0; i < wordLen; i++) {
         if (wordChars[i].matches(".correct")) {
             correctCharsCount++
@@ -170,12 +172,14 @@ function getPartialWordState(word: HTMLElement) {
     const wordChars = word.children
     const wordLen = wordChars.length
     let check = true
+
     for (let i = 0; i < wordLen; i++) {
         if (wordChars[i].matches(".incorrect")) {
             word.classList.add("incorrectWord")
             check = false
         }
     }
+
     if (check) {
         word.classList.remove("incorrectWord")
     }
@@ -190,31 +194,44 @@ function updateHTMLWpm(object: types.testStats) {
     (document.querySelector("#raw-wpm") as HTMLElement).innerText = `${Math.round(object.rawWpm)}`;
 }
 
-function startTest(object: types.testStats, field: HTMLElement, listener: EventListener) {
-    activeChar = (document.querySelector("#words") as HTMLElement).firstChild?.firstChild as HTMLElement
+function startTest(object: types.testStats) {
     object.state = "active"
     object.inputStats.startTime = Date.now()
-    startTimer(object.time)
-    startStatsUpdate(object)
-    setTimeout(() => endTest(object, field, listener), object.time * 1000)
+    startTimer(object)
 }
 
-function endTest(object: types.testStats, field: HTMLElement, listener: EventListener) {
+export function completeTest(object: types.testStats) {
+    activeChar = null;
+
+    if (object.inputStats.timerID) {
+        clearInterval(object.inputStats.timerID)
+        object.inputStats.timerID = undefined
+    }
+
     object.inputStats.endTime = ((object.time * 1000) + object.inputStats.startTime)
     object.updateAccuracy()
     object.updateWpm()
     object.state = "completed"
-    field.removeEventListener("input", listener)
 }
 
-function startStatsUpdate(object: types.testStats) {
-    (function innerFunc() {
-        if (object.state === "completed") return
-        setTimeout(() => {
-            object.inputStats.updateStats(activeChar)
-            object.updateWpm()
-            updateHTMLWpm(object)
-            innerFunc()
-        }, 1000)
-    })()
+export function abortTest(object: types.testStats) {
+    activeChar = null;
+
+    if (object.state == "active") {
+        if (object.inputStats.timerID) {
+            clearInterval(object.inputStats.timerID)
+            object.inputStats.timerID = undefined
+        }
+
+        object.inputStats.endTime = Date.now()
+        object.updateAccuracy()
+        object.updateWpm()
+        object.state = "aborted"
+    }
+}
+
+export function updateStatsTimer(object: types.testStats) {
+    object.inputStats.updateStats(activeChar as HTMLElement)
+    object.updateWpm()
+    updateHTMLWpm(object)
 }

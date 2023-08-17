@@ -1,9 +1,9 @@
-/* Main typescript file */
-import * as stats from "./stats/init-stats"
 import * as test from "./test/init-test"
 import * as menus from "./menus/init-menus"
+import { listenInput } from "./test/input"
 
+export const currentTest = new test.Test
 
-const testStats = stats.initStats("time15", 15)
-test.initTest(testStats)
+currentTest.initTest()
+listenInput()
 menus.initMenus()

@@ -1,8 +1,20 @@
-import * as types from "./test.types"
 import * as gen from "./gen-words"
 import * as input from "./input"
+import * as stats from "../stats/init-stats"
 
-export function initTest(testStats: types.testStats) {
-    gen.getWordList()
-    input.listenInput(testStats)
+const testMode = "time15"
+const testLength = 15
+
+export class Test {
+    testStats = stats.initStats(testMode, testLength)
+
+    initTest() {
+        gen.getWordList()
+    }
+
+    resetTest() {
+        input.abortTest(this.testStats)
+        this.testStats = stats.initStats(testMode, testLength)
+        gen.updateWords()
+    }
 }
