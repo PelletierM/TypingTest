@@ -1,5 +1,6 @@
 export interface testStats {
-    type: string
+    mode: string
+    language: string
     time: number
     wpm: number
     rawWpm: number
@@ -22,10 +23,11 @@ export interface inputStats {
 }
 
 export interface wpmStats {
-    correctWordsChars: number
-    correctChars: number
+    correctWordsCorrectChars: number
+    incorrectWordsCorrectChars: number
     incorrectChars: number
     extraChars: number
+    missedChars: number
 }
 
 export type FetchedWordList = {[index:string]:number}

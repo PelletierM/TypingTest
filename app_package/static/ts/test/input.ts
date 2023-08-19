@@ -2,6 +2,7 @@ import * as types from "./test.types"
 import { updateCursor } from "./cursor"
 import { startTimer } from "../stats/timer"
 import { currentTest } from "../index"
+import { sendResults, showResults } from "./results"
 
 let activeChar: HTMLElement | null
 
@@ -153,14 +154,14 @@ function updateWordState(char: HTMLElement) {
 function getFullWordState(word: HTMLElement) {
     const wordChars = word.children
     const wordLen = wordChars.length
-    let correctCharsCount = 0
+    let incorrectWordsCorrectCharsCount = 0
 
     for (let i = 0; i < wordLen; i++) {
         if (wordChars[i].matches(".correct")) {
-            correctCharsCount++
+            incorrectWordsCorrectCharsCount++
         }
     }
-    if (correctCharsCount !== wordLen) {
+    if (incorrectWordsCorrectCharsCount !== wordLen) {
         word.classList.add("incorrectWord")
     }
     else {
@@ -212,6 +213,11 @@ export function completeTest(object: types.testStats) {
     object.updateAccuracy()
     object.updateWpm()
     object.state = "completed"
+
+    // Async function
+    sendResults(object)
+
+    showResults(object)
 }
 
 export function abortTest(object: types.testStats) {
@@ -227,6 +233,9 @@ export function abortTest(object: types.testStats) {
         object.updateAccuracy()
         object.updateWpm()
         object.state = "aborted"
+
+        // Async function
+        sendResults(object)
     }
 }
 

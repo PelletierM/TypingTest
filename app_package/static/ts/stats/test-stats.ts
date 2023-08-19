@@ -1,7 +1,8 @@
 import * as types from "../test/test.types"
 
 export class TestStats implements types.testStats {
-    type: string
+    mode: string
+    language: string
     time: number
     wpm: number
     rawWpm: number
@@ -9,8 +10,9 @@ export class TestStats implements types.testStats {
     state: "inactive" | "active" | "completed" | "aborted"
     inputStats: types.inputStats
 
-    constructor(type: string, time: number = 0, stats: types.inputStats = new InputStats) {
-        this.type = type
+    constructor(mode: string, language: string, time: number = 0, stats: types.inputStats = new InputStats) {
+        this.mode = mode
+        this.language = language
         this.time = time
         this.wpm = 0
         this.rawWpm = 0
@@ -20,12 +22,12 @@ export class TestStats implements types.testStats {
     }
 
     updateAccuracy(inputStats: types.inputStats = this.inputStats) {
-        this.accuracy = updateAccuracy(inputStats.correctInput, inputStats.incorrectInput)
+        this.accuracy = updateAccuracyInner(inputStats.correctInput, inputStats.incorrectInput)
     }
 
     updateWpm(inputStats: types.inputStats = this.inputStats) {
-        this.wpm = updateWpm(inputStats.wpmStats.correctWordsChars, (inputStats.endTime - inputStats.startTime))
-        this.rawWpm = updateWpm((inputStats.wpmStats.correctWordsChars + inputStats.wpmStats.correctChars + inputStats.wpmStats.incorrectChars + inputStats.wpmStats.extraChars), (inputStats.endTime - inputStats.startTime))
+        this.wpm = updateWpm(inputStats.wpmStats.correctWordsCorrectChars, (inputStats.endTime - inputStats.startTime))
+        this.rawWpm = updateWpm((inputStats.wpmStats.correctWordsCorrectChars + inputStats.wpmStats.incorrectWordsCorrectChars + inputStats.wpmStats.incorrectChars + inputStats.wpmStats.extraChars), (inputStats.endTime - inputStats.startTime))
     }
 }
 
@@ -41,10 +43,11 @@ export class InputStats implements types.inputStats {
         this.correctInput = 0
         this.incorrectInput = 0
         this.wpmStats = {
-            correctWordsChars: 0,
-            correctChars: 0,
+            correctWordsCorrectChars: 0,
+            incorrectWordsCorrectChars: 0,
             incorrectChars: 0,
-            extraChars: 0
+            extraChars: 0,
+            missedChars: 0
         }
         this.startTime = startTime
         this.endTime = startTime + 1
@@ -73,26 +76,31 @@ function updateWpm(count: number, time: number) {
     return (count / (time / 1000) / 5 * 60)
 }
 
-function updateAccuracy(correctCount: number, invalidCount: number) {
-    return (correctCount / (correctCount + invalidCount))
+function updateAccuracyInner(correctCount: number, invalidCount: number) {
+    if ((correctCount + invalidCount) > 0) {
+        return (correctCount / (correctCount + invalidCount))
+    }
+    return 0
 }
 
 function updateChars(activeChar: HTMLElement): types.wpmStats {
     const currentCharStats = {
-        correctWordsChars: 0,
-        correctChars: 0,
+        correctWordsCorrectChars: 0,
+        incorrectWordsCorrectChars: 0,
         incorrectChars: 0,
-        extraChars: 0
+        extraChars: 0,
+        missedChars: 0
     };
 
     (function getChar(char: HTMLElement) {
-        const correctWord = checkCorrectWord(char)
-        const charState: string | undefined = checkCharState(char, correctWord)
+        if ((char != activeChar) || (activeChar?.matches(".extra, .correct, .incorrect"))) {
+            const correctWord = checkCorrectWord(char)
+            const charState: string | undefined = checkCharState(char, correctWord)
 
-        if (charState) {
-            currentCharStats[`${charState}Chars` as keyof types.wpmStats]++
+            if (charState) {
+                currentCharStats[`${charState}Chars` as keyof types.wpmStats]++
+            }
         }
-
         const previousChar = getPreviousChar(char)
         if (!previousChar) return
 
@@ -115,10 +123,10 @@ function checkCharState(char: HTMLElement, correctWord: boolean): string | undef
         return "incorrect"
     }
     if (char.matches(".correct")) {
-        if (correctWord) return "correctWords"
-        return "correct"
+        if (correctWord) return "correctWordsCorrect"
+        return "incorrectWordsCorrect"
     }
-    return undefined
+    return "missed"
 }
 
 function checkCorrectWord(char: HTMLElement): boolean {
@@ -128,10 +136,10 @@ function checkCorrectWord(char: HTMLElement): boolean {
 function getPreviousChar(char: HTMLElement): HTMLElement | undefined {  
     if (char.previousElementSibling) {
         return char.previousElementSibling as HTMLElement
-    } 
+    }
     if ((char.parentElement as HTMLElement).previousElementSibling) {
-        return Array.from(((char.parentElement as HTMLElement).previousElementSibling as HTMLElement).querySelectorAll('.correct, .incorrect')).pop() as HTMLElement
-    } 
+        return Array.from(((char.parentElement as HTMLElement).previousElementSibling as HTMLElement).querySelectorAll(".letter")).pop() as HTMLElement
+    }
     return undefined
 }
 
@@ -140,12 +148,17 @@ function checkCorrectSpace(previousChar: HTMLElement): string | undefined {
     const previousCorrectWord = checkCorrectWord(previousChar)
         
     if (previousChar === previousWordLastChar) {
-        if (previousCorrectWord) return "correctWords"
-        else  return "correct"
+        if (previousCorrectWord) {
+            return "correctWordsCorrect"
+        }
+        else if (previousChar.matches(".correct, .incorrect")) {
+            return "incorrectWordsCorrect"
+        }
+        else return "incorrect"
     }
-    return undefined
+
 }
 
-export function generateTestStats(type: string, time: number): types.testStats {
-    return new TestStats(type, time)
+export function generateTestStats(mode: string, language: string, time: number): types.testStats {
+    return new TestStats(mode, language, time)
 }

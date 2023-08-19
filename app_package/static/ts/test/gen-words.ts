@@ -5,11 +5,11 @@ const amount: number = 150
 let fetchedObject: types.FetchedWordList
 let wordList: types.WordItem[]
 
-export async function getWordList(url: string = "/test/wordlist", currentList: string = "french_weighted") {
+export async function getWordList(currentList: string, url: string = "/test/wordlist") {
     await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(currentList)
+        body: JSON.stringify({"language": currentList})
     })
     .then((response) => response.json())
     .then((result) => {

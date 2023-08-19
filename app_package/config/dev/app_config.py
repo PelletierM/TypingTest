@@ -12,3 +12,6 @@ class Config(object):
     MAIL_DEBUG = False
     MAIL_USERNAME = "example@app.com"
     MAIL_PASSWORD = "examplepassword"
+
+    # Path
+    ROOT_DIRECTORY = "/home/maxime/documents/github/typing-test/"
