@@ -1,21 +1,21 @@
 import * as gen from "./gen-words"
-import * as input from "./input"
-import * as stats from "../stats/init-stats"
 
-const testMode = "time 15"
-const language = "french"
-const testLength = 15
+import { generateCounter } from "../stats/counter"
+import * as stats from "../stats/init-stats"
+import { preferences } from "../settings/preferences"
 
 export class Test {
-    testStats = stats.initStats(testMode, language, testLength)
-
+    testStats = stats.initStats(preferences["mode"], preferences["language"], preferences["length"])
+    
     initTest() {
-        gen.getWordList(language)
+        gen.getWordList(preferences["mode"], preferences["length"], preferences["language"])
+        generateCounter()
+
     }
 
     resetTest() {
-        input.abortTest(this.testStats)
-        this.testStats = stats.initStats(testMode, language, testLength)
-        gen.updateWords()
+        this.testStats = stats.initStats(preferences["mode"], preferences["language"], preferences["length"])
+        gen.updateWords(preferences["mode"], preferences["length"])
+        generateCounter()
     }
 }

@@ -1,4 +1,4 @@
-export function initHeader() {
+export function initAuth() {
     authModalToggle()
     authFormSelector()
     authFormInteractions()

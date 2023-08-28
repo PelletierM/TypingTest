@@ -1,11 +1,12 @@
 export interface testStats {
     mode: string
     language: string
-    time: number
+    time: number | null
+    words: number | null
     wpm: number
     rawWpm: number
     accuracy: number
-    state: "inactive" | "active" | "completed" | "aborted"
+    state: "inactive" | "active" | "completed" | "cancelled"
     inputStats: inputStats
     updateAccuracy: () => void
     updateWpm: () => void
@@ -14,6 +15,7 @@ export interface testStats {
 export interface inputStats {
     correctInput: number
     incorrectInput: number
+    wordCount: number
     wpmStats: wpmStats
     startTime: number
     endTime: number

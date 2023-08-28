@@ -1,6 +1,6 @@
 #auth {
     button {
-        @include button-overwrite
+        @include button-overwrite;
     }
     >.modal {
         @include modal;
@@ -84,7 +84,7 @@
     }
 }
 
-#auth form {
+#auth form[action="/login"], #auth form[action="/register"] {
     display: grid;
     width: 100%;
     min-height: 100%;
@@ -195,14 +195,14 @@
     }
     .form-input.second {
         bottom: 65%;
-        transition: var(--transition-time-standard);
+        transition: var(--transition-time-fast);
     }
     .form-input.third {
         bottom: 45%;
     }
     .form-input.fourth {
         bottom: 25%;
-        transition: var(--transition-time-standard);
+        transition: var(--transition-time-fast);
     }
 
     button {

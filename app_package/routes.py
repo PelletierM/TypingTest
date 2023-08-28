@@ -113,7 +113,7 @@ def results():
             checkedResults = checkResults(results)
 
             if checkedResults["validity"]:
-                new_test = Tests(user_id=current_user.id, mode=checkedResults["mode"], language=checkedResults["language"], time=checkedResults["time"], wpm=checkedResults["wpm"], raw_wpm=checkedResults["rawWpm"], accuracy=checkedResults["accuracy"], state=checkedResults["state"], chars_correct_correctword=checkedResults["correctWordsCorrectChars"], chars_correct_incorrectword=checkedResults["incorrectWordsCorrectChars"], chars_incorrect=checkedResults["incorrectChars"], chars_extra=checkedResults["extraChars"], chars_missed=checkedResults["missedChars"])
+                new_test = Tests(user_id=current_user.id, mode=checkedResults["mode"], language=checkedResults["language"], time=checkedResults["time"], words=checkedResults["words"], wpm=checkedResults["wpm"], raw_wpm=checkedResults["rawWpm"], accuracy=checkedResults["accuracy"], state=checkedResults["state"], chars_correct_correctword=checkedResults["correctWordsCorrectChars"], chars_correct_incorrectword=checkedResults["incorrectWordsCorrectChars"], chars_incorrect=checkedResults["incorrectChars"], chars_extra=checkedResults["extraChars"], chars_missed=checkedResults["missedChars"])
                 db.session.add(new_test)
                 db.session.commit()
                 print("success")

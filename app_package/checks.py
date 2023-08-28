@@ -77,7 +77,7 @@ def checkResults(results):
         "validity": True,
     }
 
-    if (results["mode"] in modes):
+    if (results["mode"] in list(modes.keys())):
         checkedResults["mode"] = results["mode"]
     else:
         checkedResults["validity"] = False
@@ -89,11 +89,23 @@ def checkResults(results):
         checkedResults["validity"] = False
         return checkedResults
 
-    if (int(results["time"]) >= 0):
-        checkedResults["time"] = int(results["time"])
+    if ("time" in results["mode"]):
+        if (int(results["time"]) in modes[checkedResults["mode"]]):
+            checkedResults["time"] = int(results["time"])
+        else:
+            checkedResults["validity"] = False
+            return checkedResults
     else:
-        checkedResults["validity"] = False
-        return checkedResults
+        checkedResults["time"] = None
+
+    if ("words" in results["mode"]):
+        if (int(results["words"]) in modes[checkedResults["mode"]]):
+            checkedResults["words"] = int(results["words"])
+        else:
+            checkedResults["validity"] = False
+            return checkedResults
+    else:
+        checkedResults["words"] = None
 
     if (float(results["wpm"]) >= 0 and float(results["wpm"]) < 350):
         checkedResults["wpm"] = float(results["wpm"])
@@ -113,7 +125,7 @@ def checkResults(results):
         checkedResults["validity"] = False
         return checkedResults
 
-    if (results["state"] in ["inactive", "active", "completed", "aborted"]):
+    if (results["state"] in ["inactive", "active", "completed", "cancelled"]):
         checkedResults["state"] = results["state"]
     else:
         checkedResults["validity"] = False

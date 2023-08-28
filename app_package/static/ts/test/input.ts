@@ -1,6 +1,6 @@
 import * as types from "./test.types"
 import { updateCursor } from "./cursor"
-import { startTimer } from "../stats/timer"
+import { startTimer, updateCounter } from "../stats/counter"
 import { currentTest } from "../index"
 import { sendResults, showResults } from "./results"
 
@@ -11,7 +11,7 @@ export function listenInput() {
     const testContainer = document.querySelector("#test")
 
     function inputListener(e: Event) {
-        if (currentTest.testStats.state == "completed" || currentTest.testStats.state == "aborted") {
+        if (currentTest.testStats.state == "completed" || currentTest.testStats.state == "cancelled") {
             return
         }
         if (currentTest.testStats.state === "inactive") {
@@ -28,6 +28,9 @@ export function listenInput() {
         updateCursor(activeChar as HTMLElement)
         currentTest.testStats.updateAccuracy()
         updateHTMLAccuracy(currentTest.testStats)
+        if (currentTest.testStats.words) {
+            updateCounter()
+        }
         inputField.value = " ";
     }
 
@@ -53,7 +56,15 @@ function checkWordEnd(): boolean {
 }
 
 function setNextWord() {
-    activeChar = activeChar?.parentElement?.nextElementSibling?.firstChild as HTMLElement
+    if (activeChar?.parentElement?.nextElementSibling?.matches(".word")) {
+        activeChar = activeChar?.parentElement?.nextElementSibling?.firstChild as HTMLElement
+        currentTest.testStats.inputStats.wordCount++
+    }
+    else if (currentTest.testStats.words) {
+        currentTest.testStats.inputStats.wordCount++
+        updateCounter()
+        completeTest(currentTest.testStats)
+    }
 }
 
 function setPreviousWord() {
@@ -61,12 +72,19 @@ function setPreviousWord() {
         const previousWordChar = Array.from(activeChar.parentElement?.previousElementSibling?.querySelectorAll('.correct, .incorrect')).pop()
         if (previousWordChar) activeChar = previousWordChar as HTMLElement
         if (activeChar.nextElementSibling) activeChar = activeChar.nextElementSibling as HTMLElement
+        currentTest.testStats.inputStats.wordCount--
     }
 }
 
 function setNextChar() {
     if (activeChar?.nextElementSibling) {
         activeChar = activeChar.nextElementSibling as HTMLElement
+        return
+    }
+    if (!activeChar?.parentElement?.nextElementSibling?.matches(".word") && currentTest.testStats.words) {
+        currentTest.testStats.inputStats.wordCount++
+        updateCounter()
+        completeTest(currentTest.testStats)
     }
 }
 
@@ -187,18 +205,19 @@ function getPartialWordState(word: HTMLElement) {
 }
 
 function updateHTMLAccuracy(object: types.testStats) {
-    (document.querySelector("#accuracy") as HTMLElement).innerText = `${Math.round(object.accuracy * 100)}`;
+    (document.querySelector("#live-stats > .accuracy > span.value") as HTMLElement).innerText = `${Math.round(object.accuracy * 100)}%`;
 }
 
 function updateHTMLWpm(object: types.testStats) {
-    (document.querySelector("#wpm") as HTMLElement).innerText = `${Math.round(object.wpm)}`;
-    (document.querySelector("#raw-wpm") as HTMLElement).innerText = `${Math.round(object.rawWpm)}`;
+    (document.querySelector("#live-stats > .wpm > span.value") as HTMLElement).innerText = `${Math.round(object.wpm)}`;
+//    (document.querySelector("#live-stats > .raw-wpm > span.value") as HTMLElement).innerText = `${Math.round(object.rawWpm)}`;
 }
 
 function startTest(object: types.testStats) {
     object.state = "active"
     object.inputStats.startTime = Date.now()
-    startTimer(object)
+    document.querySelector("#test-info")?.classList.add("active")
+    startTimer()
 }
 
 export function completeTest(object: types.testStats) {
@@ -209,7 +228,11 @@ export function completeTest(object: types.testStats) {
         object.inputStats.timerID = undefined
     }
 
-    object.inputStats.endTime = ((object.time * 1000) + object.inputStats.startTime)
+    if (object.time) {
+        object.inputStats.endTime = ((object.time * 1000) + object.inputStats.startTime)
+    }
+    else object.inputStats.endTime = Date.now()
+
     object.updateAccuracy()
     object.updateWpm()
     object.state = "completed"
@@ -232,8 +255,8 @@ export function abortTest(object: types.testStats) {
         object.inputStats.endTime = Date.now()
         object.updateAccuracy()
         object.updateWpm()
-        object.state = "aborted"
-
+        object.state = "cancelled"
+        document.querySelector("#test-info")?.classList.remove("active")
         // Async function
         sendResults(object)
     }

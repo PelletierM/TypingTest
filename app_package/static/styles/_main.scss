@@ -1,0 +1,7 @@
+main {
+    min-width: Min(80vw, 50rem);
+    height: 100%;
+    @include flex-center;
+    flex-direction: column;
+    gap: 3rem;
+}

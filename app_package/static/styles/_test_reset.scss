@@ -1,0 +1,13 @@
+button.test-reset {
+    @include button-overwrite;
+    @include flex-center;
+
+    svg {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    &:active {
+        transform: scale(0.8);
+    }
+}

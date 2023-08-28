@@ -1,0 +1,79 @@
+main > div.modal {
+    @include modal;
+    #test-results {
+        background-color: var(--color-background);
+        border-radius: 1rem;
+        z-index: 1;
+        overflow: hidden;
+        padding: 4rem;
+        position: relative;
+
+        @include flex-center;
+        flex-direction: column;
+        gap: 2rem;
+
+        button {
+            @include button-overwrite;
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+
+            height: 1rem;
+            width: 1rem;
+            color: var(--color-text-main);
+            transition: var(--transition-time-standard);
+            font-weight: var(--font-weight-bold);
+
+            :hover {
+                color: var(--color-text-accent);
+            }
+        }
+
+        > div {
+            @include flex-center;
+            gap: 4rem;
+            flex-wrap: wrap;
+
+            > div {
+                @include flex-center;
+                flex-direction: column;
+                &:first-child {
+                    gap: 2rem;
+                }
+                &:nth-child(2) {
+                    gap: 1rem;
+                }
+
+                div {
+                    @include flex-center;
+                    flex-direction: column;
+
+                    span {
+                        font-size: 1em;
+                        color: var(--color-text-test)
+                    }
+                }
+            }
+        }
+
+        .wpm, .accuracy {
+            font-size: 1.5rem;
+
+            span.result {
+                font-size: 1.75em;
+                color: var(--color-text-main)
+            }
+        }
+        .mode, .language, .raw-wpm, .chars {
+            font-size: 1rem;
+
+            span.result {
+                color: var(--color-text-main)
+            }
+        }
+        span {
+            font-size: 0.875rem;
+            color: var(--color-text-test);
+        }
+    }
+}

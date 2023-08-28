@@ -1,5 +1,5 @@
-// Color theme
 :root {
+    // Color theme
     --color-background: rgb(50, 50, 50);
     --color-text-main: rgb(211, 211, 211);
     --color-text-accent:rgb(55, 144, 133);
@@ -7,20 +7,17 @@
     --color-text-incorrect: rgb(196, 88, 88);
     --color-modal: rgba(0, 0, 0, 0.75);
 
+    // Transitions
+    --transition-time-slow: 0.3s;
     --transition-time-standard: 0.25s;
     --transition-time-fast: 0.1s;
 
+    // Fonts
     --font-weight-light: 300;
     --font-weight-normal: 400;
     --font-weight-bold: 600;
+
+    --font-size-html: 16px;
+    --test-size: 1.5rem;
+    --test-line-height: 1.875rem;
 }
-
-$margin-standard: 1rem;
-$padding-standard: 1rem;
-$gap-standard: 1rem;
-
-$font-size-normal: 1rem;
-$font-size-small: 0.875rem;
-$font-size-large: 1.125rem;
-$font-light: 300;
-$font-bold: 600;

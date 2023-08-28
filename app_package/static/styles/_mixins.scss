@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+@mixin flex-justify-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 @mixin flex-justify-start {
     display: flex;
     justify-content: flex-start;
@@ -53,11 +59,13 @@
     z-index: 2;
     pointer-events: none;
     opacity: 0;
+    visibility: hidden;
     transition: var(--transition-time-standard);
     background-color: var(--color-modal);
 
     &.active {
         pointer-events: all;
+        visibility: visible;
         opacity: 1;
     }
 }

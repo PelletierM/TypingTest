@@ -1,15 +1,14 @@
 import * as types from "./test.types"
 import { genCursor } from "./cursor"
 
-const amount: number = 150
 let fetchedObject: types.FetchedWordList
 let wordList: types.WordItem[]
 
-export async function getWordList(currentList: string, url: string = "/test/wordlist") {
+export async function getWordList(mode: string, length: number, language: string, url: string = "/test/wordlist") {
     await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({"language": currentList})
+        body: JSON.stringify({"language": language})
     })
     .then((response) => response.json())
     .then((result) => {
@@ -17,7 +16,7 @@ export async function getWordList(currentList: string, url: string = "/test/word
     })
     .then(() => {
         wordList = sortFetched(fetchedObject)
-        updateWords()
+        updateWords(mode, length)
     })
     .catch(() => {
     throw new Error("Wordlist fetch failed")
@@ -52,8 +51,18 @@ function generateWords(amount: number): string[] {
     return words
 }
 
-export function updateWords() {
+export function updateWords(mode: string, length: number) {
     const divWords = document.querySelector("#words")
+    let amount = 0;
+    if (mode == "time") {
+        amount = length * 6
+    }
+    else if (mode == "words") {
+        amount = length
+    }
+    else {
+        amount = 150
+    }
     const words: string[] = generateWords(amount)
     if (divWords) {
         divWords.innerHTML = "";

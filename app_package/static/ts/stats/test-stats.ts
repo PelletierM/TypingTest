@@ -3,17 +3,29 @@ import * as types from "../test/test.types"
 export class TestStats implements types.testStats {
     mode: string
     language: string
-    time: number
+    time: number | null
+    words: number | null
     wpm: number
     rawWpm: number
     accuracy: number
-    state: "inactive" | "active" | "completed" | "aborted"
+    state: "inactive" | "active" | "completed" | "cancelled"
     inputStats: types.inputStats
 
-    constructor(mode: string, language: string, time: number = 0, stats: types.inputStats = new InputStats) {
+    constructor(mode: string, language: string, length: number = 0, stats: types.inputStats = new InputStats) {
         this.mode = mode
         this.language = language
-        this.time = time
+        this.time = (() => {
+            if (this.mode == "time") {
+                return length
+            }
+            return null
+        })()
+        this.words = (() => {
+            if (this.mode == "words") {
+                return length
+            }
+            return null
+        })()
         this.wpm = 0
         this.rawWpm = 0
         this.accuracy = 0
@@ -34,6 +46,7 @@ export class TestStats implements types.testStats {
 export class InputStats implements types.inputStats {
     correctInput: number
     incorrectInput: number
+    wordCount: number
     wpmStats: types.wpmStats
     startTime: number
     endTime: number
@@ -42,6 +55,7 @@ export class InputStats implements types.inputStats {
     constructor(startTime: number = Date.now()) {
         this.correctInput = 0
         this.incorrectInput = 0
+        this.wordCount = 0;
         this.wpmStats = {
             correctWordsCorrectChars: 0,
             incorrectWordsCorrectChars: 0,
@@ -159,6 +173,6 @@ function checkCorrectSpace(previousChar: HTMLElement): string | undefined {
 
 }
 
-export function generateTestStats(mode: string, language: string, time: number): types.testStats {
-    return new TestStats(mode, language, time)
+export function generateTestStats(mode: string, language: string, length: number): types.testStats {
+    return new TestStats(mode, language, length)
 }
