@@ -10,17 +10,26 @@
     }
 }
 
-div#cursor {
+
+#test div#cursor {
     position: absolute;
     width: 1ch;
     height: 1px;
     background-color: var(--color-text-accent);
     transition: 0.1s;
-    animation-name: cursorBlinking;
+    visibility: visible;
+        animation-name: cursorBlinking;
     animation-duration: 1s;
+    animation-delay: 0.2s;
     animation-iteration-count: infinite;
 
     &.active {
         animation: none;
     }
+}
+
+#test.inactive div#cursor {
+    transition: none;
+    animation: none;
+    visibility: hidden;
 }

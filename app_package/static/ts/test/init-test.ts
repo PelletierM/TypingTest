@@ -16,6 +16,7 @@ export class Test {
     resetTest() {
         this.testStats = stats.initStats(preferences["mode"], preferences["language"], preferences["length"])
         gen.updateWords(preferences["mode"], preferences["length"])
-        generateCounter()
+        generateCounter();
+        (document.querySelector("#test-input") as HTMLInputElement).focus()
     }
 }

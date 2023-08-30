@@ -28,16 +28,34 @@ export function listenInput() {
         updateCursor(activeChar as HTMLElement)
         currentTest.testStats.updateAccuracy()
         updateHTMLAccuracy(currentTest.testStats)
+
         if (currentTest.testStats.words) {
             updateCounter()
+            if (currentTest.testStats.inputStats.wordCount == currentTest.testStats.words) {
+                completeTest(currentTest.testStats)
+            }
         }
         inputField.value = " ";
     }
 
+    [document.querySelector("#test-menu"), document.querySelector(".test-reset")].forEach(element => {
+        element?.addEventListener("mousedown", function(e) {
+            e.preventDefault()
+        })
+    })
+
     inputField.addEventListener("input", inputListener)
+
     testContainer?.addEventListener("focusin", function(e){
         e.preventDefault
         inputField.focus()
+    })
+
+    inputField.addEventListener("focusin", function() {
+        testContainer?.classList.remove("inactive")
+    })
+    inputField.addEventListener("focusout", function() {
+        testContainer?.classList.add("inactive")
     })
 }
 
@@ -62,8 +80,6 @@ function setNextWord() {
     }
     else if (currentTest.testStats.words) {
         currentTest.testStats.inputStats.wordCount++
-        updateCounter()
-        completeTest(currentTest.testStats)
     }
 }
 
@@ -81,10 +97,9 @@ function setNextChar() {
         activeChar = activeChar.nextElementSibling as HTMLElement
         return
     }
+
     if (!activeChar?.parentElement?.nextElementSibling?.matches(".word") && currentTest.testStats.words) {
         currentTest.testStats.inputStats.wordCount++
-        updateCounter()
-        completeTest(currentTest.testStats)
     }
 }
 

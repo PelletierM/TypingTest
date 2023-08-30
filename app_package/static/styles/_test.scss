@@ -1,45 +1,75 @@
 div#test {
-    position: relative;
-    font-size: var(--test-size);
     width: 100%;
-    min-height: calc(3ch + calc(3.75 * var(--test-size)) - 4px);
-    overflow: hidden;
-    * {
-        line-height: var(--test-line-height);
-    }
+    position: relative;
 
-    div#words {
-        position: absolute;
-        top: 0;
-        left: 0;
+    .boundary {
+        position: relative;
+        font-size: var(--test-size);
         width: 100%;
-
-        @include flex-justify-start;
-        flex-wrap: wrap;
-        z-index: 1;
-
+        min-height: calc(3ch + calc(3.75 * var(--test-size)) - 4px);
         transition: var(--transition-time-fast);
+        overflow: hidden;
 
-        .word {
-            margin-right: 1ch;
-            margin-bottom: 0.75rem;
-            color: var(--color-text-test);
-            span.correct {
-                color: var(--color-text-main);
+        * {
+            line-height: var(--test-line-height);
+        }
+
+        div#words {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+
+            @include flex-justify-start;
+            flex-wrap: wrap;
+            z-index: 1;
+
+            transition: var(--transition-time-fast);
+
+            .word {
+                margin-right: 1ch;
+                margin-bottom: 0.75rem;
+                color: var(--color-text-test);
+                span.correct {
+                    color: var(--color-text-main);
+                }
+                span.incorrect {
+                    color: var(--color-text-incorrect);
+                }
+                span {
+                    display: inline-block;
+                }
             }
-            span.incorrect {
-                color: var(--color-text-incorrect);
-            }
-            span {
-                display: inline-block;
-            }
+        }
+
+        input#test-input {
+            z-index: -1;
+            position: absolute;
+            top: 0%;
+            opacity: 0;
         }
     }
 
-    input#test-input {
-        z-index: -1;
+    &::before {
+        content: "click here to activate";
+        font-size: 1rem;
         position: absolute;
-        top: 0%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        visibility: hidden;
+        transition: var(--transition-time-fast);
         opacity: 0;
+
+    }
+    &.inactive {
+        > .boundary {
+            opacity: 0.5;
+            filter: blur(0.25rem);
+        }
+        &::before {
+            visibility: visible;
+            opacity: 1;
+        }
     }
 }
