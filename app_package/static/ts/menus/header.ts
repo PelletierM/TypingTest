@@ -22,7 +22,9 @@ function authFormSelector() {
     const authFormContainer = document.querySelector(".form-container")
     const authForm = authFormContainer?.querySelector("form") as HTMLFormElement
     const selectedDiv = document.querySelector(".auth-selected")
+    const usernameInput = authFormContainer?.querySelector("#username") as HTMLInputElement
     const emailInput = authFormContainer?.querySelector("#email") as HTMLInputElement
+    const passwordInput = authFormContainer?.querySelector("#password") as HTMLInputElement
     const confirmationInput = authFormContainer?.querySelector("#confirmation") as HTMLInputElement
 
     authLoginSelector?.addEventListener("click", function() {
@@ -32,6 +34,8 @@ function authFormSelector() {
         authFormContainer?.classList.remove("register")
         selectedDiv?.classList.remove("translated")
         authForm.action = "/login"
+        usernameInput.removeAttribute("pattern")
+        passwordInput.removeAttribute("pattern")
         emailInput.disabled = true;
         confirmationInput.disabled = true;
     })
@@ -43,6 +47,8 @@ function authFormSelector() {
         authFormContainer?.classList.remove("login")
         selectedDiv?.classList.add("translated")
         authForm.action = "/register"
+        usernameInput.setAttribute("pattern","^[a-zA-Z\\d]{8,24}$")
+        passwordInput.setAttribute("pattern", "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\w\\W]{8,24}$")
         emailInput.disabled = false;
         confirmationInput.disabled = false;
     })
@@ -73,6 +79,8 @@ function authFormInteractions() {
             "email": "Please enter a valid email."
         },
         "patternMismatch": {
+            "username": "Does not meet requirements.",
+            "password": "Does not meet requirements.",
             "confirmation": "Passwords do not match."
         },
         "valid": "This is not a valid input."
@@ -111,7 +119,6 @@ function authFormInteractions() {
     })
 
     authForm?.addEventListener("submit", function(e){
-        console.log("triggered")
         let prevent = false;
         inputFields?.forEach(function(inputField) {
                             console.log(inputField)

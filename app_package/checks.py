@@ -45,7 +45,7 @@ def checkRegister(formData):
         username = ""
 
     # Requirements : 8-24 characters, at least one uppercase, one lowercase and one number
-    password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$"
+    password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,24}$"
     if not re.fullmatch(password_regex, password) :
         validity["error"] = True
         validity["messages"].append("Password does not meet requirements.")
