@@ -22,16 +22,40 @@
     align-items: center;
 }
 
-@mixin button-overwrite {
+@mixin anchor-main {
+    text-decoration: none;
+    color: var(--color-text-test);
+    transition: var(--transition-time-standard);
+
+    &:link {
+        color: var(--color-text-test);
+    }
+    &:visited {
+        color: var(--color-text-test);
+    }
+    &:hover {
+        color: var(--color-text-accent);
+    }
+}
+
+@mixin button-overwrite-complete {
     font-family: inherit;
     font-size: inherit;
     background-color: transparent;
     border: none;
     color: var(--color-text-main);
+}
+
+@mixin button-overwrite {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: transparent;
+    border: none;
+    color: var(--color-text-test);
     transition: var(--transition-time-standard);
     &:hover {
         color: var(--color-text-accent);
-    }    
+    }
 }
 
 @mixin button-main {
@@ -41,7 +65,6 @@
     color: var(--color-background);
     &:hover {
         background-color: var(--color-text-accent);
-        color: var(--color-text-main)
     }
 }
 

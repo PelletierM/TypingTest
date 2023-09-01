@@ -18,7 +18,7 @@ def index():
     if current_user.is_authenticated :
         username = current_user.username
 
-    return render_template("base.html", template_check="Template working", is_logged_in=current_user.is_authenticated, username=username)
+    return render_template("test.html", is_logged_in=current_user.is_authenticated, username=username)
 
 @routes.route("/register", methods=["GET", "POST"])
 def register():
@@ -92,19 +92,14 @@ def logout():
     logout_user()
     return redirect(url_for("routes.index"))
 
-@routes.route("/test/wordlist", methods=["POST"])
-def wordlist():
-    if request.method == "POST":
-        content_type = request.headers.get("Content-Type")
-        if content_type == "application/json" :
-            language = request.json.get("language")
-            root_dir = current_app.config["ROOT_DIRECTORY"]
-            with open(f"{root_dir}/app_package/static/languages/{language}.json", "r", encoding="utf-8") as file:
-                words = json.load(file)
-                return json.dumps(words)
-    return redirect(url_for("routes.index"))
+@routes.route("/api/wordlist/<token>", methods=["GET"])
+def wordlist(token):
+    root_dir = current_app.config["ROOT_DIRECTORY"]
+    with open(f"{root_dir}/app_package/static/languages/{token}.json", "r", encoding="utf-8") as file:
+        words = json.load(file)
+        return json.dumps(words)
 
-@routes.route("/test/results", methods=["POST"])
+@routes.route("/api/results", methods=["POST", "GET"])
 def results():
     if request.method == "POST":
         content_type = request.headers.get("Content-Type")
@@ -121,3 +116,18 @@ def results():
             else: print("failure")
         return "failure"
     return redirect(url_for("routes.index"))
+
+@routes.route("/profile", methods=["GET"])
+def profile():
+    if not current_user.is_authenticated:
+        return redirect(url_for("routes.index")) 
+    username = current_user.username
+    return render_template("profile.html", is_logged_in=current_user.is_authenticated, username=username)
+
+@routes.route("/leaderboards")
+def leaderboards():
+    username = ""
+    if current_user.is_authenticated :
+        username = current_user.username
+
+    return render_template("leaderboards.html", is_logged_in=current_user.is_authenticated, username=username)

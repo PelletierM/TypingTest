@@ -2,6 +2,8 @@ button.test-reset {
     @include button-overwrite;
     @include flex-center;
 
+    color: var(--color-text-maint);
+
     svg {
         width: 2rem;
         height: 2rem;

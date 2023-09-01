@@ -1,6 +1,38 @@
 header {
+    max-width: Min(90vw, 80rem);
+    margin-left: auto;
+    margin-right: auto;
     height: 5rem;
     width: 100%;
-    background-color: black;
+    background-color: var(--color-background-main);
     @include flex-justify-space-between;
+
+    > .logo {
+        a {
+            color: var(--color-text-main);
+            text-decoration: none;
+            font-weight: var(--font-weight-bold);
+            font-size: 1.75rem;
+        }
+    }
+
+    > .menu {
+        @include flex-justify-end;
+        gap: 1.75rem;
+        font-size: 1rem;
+
+        [title="leaderboards"], [title="profile"] {
+            @include button-overwrite;
+            @include flex-center;
+            gap: 0.5ch;
+            span {
+                line-height: 1rem;
+            }
+        }
+
+        svg {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+    }
 } 

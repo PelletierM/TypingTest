@@ -4,12 +4,8 @@ import { genCursor } from "./cursor"
 let fetchedObject: types.FetchedWordList
 let wordList: types.WordItem[]
 
-export async function getWordList(mode: string, length: number, language: string, url: string = "/test/wordlist") {
-    await fetch(url, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({"language": language})
-    })
+export async function getWordList(mode: string, length: number, language: string) {
+    await fetch(`/api/wordlist/${language}`)
     .then((response) => response.json())
     .then((result) => {
         fetchedObject = result

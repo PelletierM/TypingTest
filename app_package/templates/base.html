@@ -16,19 +16,10 @@
 </head>
 <body>
     {% include "header.html" %}
-
     <main>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {{ message }}
-                {% endfor %}
-            {% endif%}
-        {% endwith %}
-        {% include "test.html" %}
-        {% include "test_results.html" %}
+        {% block main %}
+        {% endblock %}
     </main>
-
     {% include "footer.html" %}
 </body>
 </html>
