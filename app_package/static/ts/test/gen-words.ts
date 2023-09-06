@@ -1,4 +1,4 @@
-import * as types from "./test.types"
+import * as types from "../utils/test.types"
 import { genCursor } from "./cursor"
 
 let fetchedObject: types.FetchedWordList

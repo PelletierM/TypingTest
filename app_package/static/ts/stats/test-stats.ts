@@ -1,4 +1,4 @@
-import * as types from "../test/test.types"
+import * as types from "../utils/test.types"
 
 export class TestStats implements types.testStats {
     mode: string

@@ -7,7 +7,7 @@ footer {
         @include flex-center;
         @include anchor-main;
 
-        font-size: 1rem;
+        font-size: 0.875rem;
         gap: 1ch;
 
         span {
@@ -16,8 +16,8 @@ footer {
 
         svg {
             color: inherit;
-            width: 1rem;
-            height: 1rem;
+            width: 0.875rem;
+            height: 0.875rem;
         }
     }
 }

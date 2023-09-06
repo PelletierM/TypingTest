@@ -1,6 +1,10 @@
 #auth {
     button {
         @include button-overwrite;
+        display: flex;
+        svg {
+            align-self: center;
+        }
     }
     >.modal {
         @include modal;

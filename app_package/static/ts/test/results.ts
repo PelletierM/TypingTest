@@ -1,4 +1,4 @@
-import * as types from "./test.types"
+import * as types from "../utils/test.types"
 import { currentTest } from "../index"
 
 export async function sendResults(testStats: types.testStats, url: string = "/test/results") {

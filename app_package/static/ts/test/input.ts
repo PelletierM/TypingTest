@@ -1,4 +1,4 @@
-import * as types from "./test.types"
+import * as types from "../utils/test.types"
 import { updateCursor } from "./cursor"
 import { startTimer, updateCounter } from "../stats/counter"
 import { currentTest } from "../index"
