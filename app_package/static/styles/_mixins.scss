@@ -63,6 +63,7 @@
     font-size: inherit;
     background-color: var(--color-text-main);
     color: var(--color-background);
+    border: none;
     &:hover {
         background-color: var(--color-text-accent);
     }
