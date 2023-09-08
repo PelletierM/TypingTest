@@ -6,7 +6,7 @@ const testResetButton = document.querySelector(".test-reset")
 
 export function initResetButton() {
     testResetButton?.addEventListener("click", () => {
-        input.abortTest(currentTest.testStats)
+        input.cancelTest(currentTest.testStats)
         currentTest.resetTest()
     })
 }

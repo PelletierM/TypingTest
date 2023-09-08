@@ -34,3 +34,49 @@ export interface wpmStats {
 
 export type FetchedWordList = {[index:string]:number}
 export type WordItem = [string, number]
+
+export interface Leaderboards {
+    "15": UserList
+    "60": UserList
+}
+
+export interface UserList {
+    [propName: string]: TestResult
+}
+
+interface TestResult {
+    username: string
+    wpm: number
+    accuracy: number
+    timestamp: EpochTimeStamp
+}
+
+export interface ProfileInfo {
+    "highscores": {
+        [propName: string]: {
+            [propName: string]: number
+        }
+    }
+    "history": {
+        [propName: string]: {
+            wpm: number
+            rawwpm: number
+            accuracy: number
+            mode: string
+            time: number | null
+            words: number | null
+            language: string
+            date: EpochTimeStamp
+            charsCorrectCorrectword: number
+            charsCorrectIncorrectword: number
+            charsExtra: number
+            charsIncorrect: number
+            charsMissed: number
+        }
+    }
+    "stats": {
+        [propName: string]: {
+            [propName: string]: number
+        }
+    }
+}

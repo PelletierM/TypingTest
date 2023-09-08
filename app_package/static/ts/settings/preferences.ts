@@ -1,7 +1,7 @@
 export const preferences = {
     "mode": "time",
-    "length": 30,
-    "length-time": 30,
+    "length": 60,
+    "length-time": 60,
     "length-words": 10,
     "language": "french"
 }

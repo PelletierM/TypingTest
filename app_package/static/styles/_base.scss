@@ -15,7 +15,47 @@ body {
     background-color: var(--color-background);
     min-height: 100vh;
     min-height: 100svh;
+    max-height: 100vh;
+    max-height: 100svh;
     @include flex-center;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.title-s1 {
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.title-s2 {
+    font-size: 1.375rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.title-s3 {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-normal);
+}
+
+.title-s4 {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-normal);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    tr {
+        height: 1.75rem;
+    }
+    tr:nth-child(2n) {
+        background-color: var(--color-table-row)
+    }
+    th {
+        color: var(--color-text-test);
+        padding: 0 0.5rem;
+    }
+    td {
+        padding: 0 0.5rem;
+    }
 }

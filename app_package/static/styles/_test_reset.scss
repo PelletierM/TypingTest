@@ -2,7 +2,7 @@ button.test-reset {
     @include button-overwrite;
     @include flex-center;
 
-    color: var(--color-text-maint);
+    color: var(--color-text-test);
 
     svg {
         width: 2rem;
@@ -10,6 +10,6 @@ button.test-reset {
     }
 
     &:active {
-        transform: scale(0.8);
+        transform: scale(0.875);
     }
 }

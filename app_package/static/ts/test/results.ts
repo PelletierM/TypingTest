@@ -1,7 +1,7 @@
 import * as types from "../utils/test.types"
 import { currentTest } from "../index"
 
-export async function sendResults(testStats: types.testStats, url: string = "/test/results") {
+export async function sendResults(testStats: types.testStats, url: string = "/api/results") {
     const testStatsJSON = JSON.stringify(testStats)
     await fetch(url, {
         method: "POST",

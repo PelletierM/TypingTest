@@ -1,8 +1,131 @@
-{% extends "base.html" %}
-
-{% block main %}
-<div>
-    <span>This is your profile</span>
+<div id="profile" class="hidden">
+    <div class="title title-s2">
+        <span>{{ username }}</span>
+    </div>
+    <div class="profile-info">
+        <div class="highscores">
+            <span class="title-s3">high scores 	&#40;wpm&#41;</span>
+            <div class="time">
+                <div>
+                    <div class="time15">
+                        <span class="title-s4">time 15</span>
+                        <span class="score">-</span>
+                    </div>
+                    <div class="time30">
+                        <span class="title-s4">time 30</span>
+                        <span class="score">-</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="time60">
+                        <span class="title-s4">time 60</span>
+                        <span class="score">-</span>
+                    </div>
+                    <div class="time120">
+                        <span class="title-s4">time 120</span>
+                        <span class="score">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="words">
+                <div>
+                    <div class="words10">
+                        <span class="title-s4">words 10</span>
+                        <span class="score">-</span>
+                    </div>
+                    <div class="words20">
+                        <span class="title-s4">words 20</span>
+                        <span class="score">-</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="words50">
+                        <span class="title-s4">words 50</span>
+                        <span class="score">-</span>
+                    </div>
+                    <div class="words100">
+                        <span class="title-s4">words 100</span>
+                        <span class="score">-</span>
+                    </div>
+                </div>            
+            </div>
+        </div>
+        <div class="stats">
+            <span class="title-s3">averages</span>
+            <div>
+                <div class="wpm">
+                    <div>
+                        <div>
+                            <span class="title title-s4">wpm</span>
+                            <span class="title-s4">all time</span>
+                            <span class="score stats-0">-</span>
+                        </div>
+                        <div>
+                            <span class="title title-s4">wpm</span>
+                            <span class="title-s4">last 10</span>
+                            <span class="score stats-10">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rawwpm">
+                    <div>
+                        <div>
+                            <span class="title title-s4">raw wpm</span>
+                            <span class="title-s4">all time</span>
+                            <span class="score stats-0">-</span>
+                        </div>
+                        <div>
+                            <span class="title title-s4">raw wpm</span>
+                            <span class="title-s4">last 10</span>
+                            <span class="score stats-10">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="accuracy">
+                    <div>
+                        <div>
+                            <span class="title-s4">accuracy</span>
+                            <span class="title-s4">all time</span>
+                            <span class="score stats-0">-</span>
+                        </div>
+                        <div>
+                            <span class="title-s4">accuracy</span>
+                            <span class="title-s4">last 10</span>
+                            <span class="score stats-10">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tests">
+                    <div>
+                        <div>
+                            <span class="title title-s4">tests</span>
+                            <span class="title-s4">started</span>
+                            <span class="score stats-started">-</span>
+                        </div>
+                        <div>
+                            <span class="title title-s4">tests</span>
+                            <span class="title-s4">completed</span>
+                            <span class="score stats-completed">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="history">
+            <span class="title-s3">history &#40;last 25&#41;</span>
+            <table>
+                <tr>
+                    <th class="title-s4">wpm</th>
+                    <th class="title-s4">raw</th>
+                    <th class="title-s4">acc</th>
+                    <th class="title-s4">chars</th>
+                    <th class="title-s4">mode</th>
+                    <th class="title-s4">lang</th>
+                    <th class="title-s4">date</th>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
-
-{% endblock %}

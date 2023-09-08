@@ -1,8 +1,31 @@
-{% extends "base.html" %}
-
-{% block main %}
-<div>
-    <span>These are the leaderboards</span>
+<div id="leaderboards" class="hidden">
+    <div class="title title-s2">
+        <span>leaderboards</span>
+    </div>
+    <div class="tables">
+        <div>
+            <span class="title-s3">time 15</span>
+            <table class="time15">
+                <tr>
+                    <th class="title-s4">#</th>
+                    <th class="title-s4">username</th>
+                    <th class="title-s4">wpm</th>
+                    <th class="title-s4">acc</th>
+                    <th class="title-s4">date</th>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <span class="title-s3">time 60</span>
+            <table class="time60">
+                <tr>
+                    <th class="title-s4">#</th>
+                    <th class="title-s4">username</th>
+                    <th class="title-s4">wpm</th>
+                    <th class="title-s4">acc</th>
+                    <th class="title-s4">date</th>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
-
-{% endblock %}

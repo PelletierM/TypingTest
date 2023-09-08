@@ -1,4 +1,9 @@
 :root {
+    // Dimensions
+    --site-width: Min(90vw, 80rem);
+    --test-width: Min(80vw, 50rem);
+    --padding-standard: 1rem;
+
     // Color theme
     --color-background: rgb(50, 50, 50);
     --color-text-main: rgb(211, 211, 211);
@@ -6,6 +11,7 @@
     --color-text-test: rgb(117, 117, 117);
     --color-text-incorrect: rgb(196, 88, 88);
     --color-modal: rgba(0, 0, 0, 0.75);
+    --color-table-row:  rgb(65, 65, 65);
 
     // Transitions
     --transition-time-slow: 0.3s;

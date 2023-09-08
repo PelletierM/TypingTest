@@ -1,5 +1,6 @@
 main > div.modal {
     @include modal;
+
     #test-results {
         background-color: var(--color-background);
         border-radius: 1rem;

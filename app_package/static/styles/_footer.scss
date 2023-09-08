@@ -1,6 +1,9 @@
 footer {
-    height: 5rem;
-    width: 100%;
+    max-width: var(--site-width);
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 5rem;
+    background-color: var(--color-background-main);
     @include flex-center;
 
     a {

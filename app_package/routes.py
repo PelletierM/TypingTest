@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, json, request, flash, current_app
-from sqlalchemy import text
+from flask import Blueprint, render_template, redirect, url_for, json, jsonify, request, flash, current_app
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -9,6 +8,7 @@ from os import path
 from .auth import generate_email_token, confirm_email_token
 from .utilities.email import send_confirm_email
 from .checks import checkResults, checkRegister
+from .utilities.queries import *
 
 routes = Blueprint("routes", __name__)
 
@@ -18,7 +18,7 @@ def index():
     if current_user.is_authenticated :
         username = current_user.username
 
-    return render_template("test.html", is_logged_in=current_user.is_authenticated, username=username)
+    return render_template("base.html", is_logged_in=current_user.is_authenticated, username=username)
 
 @routes.route("/register", methods=["GET", "POST"])
 def register():
@@ -35,7 +35,7 @@ def register():
             email_token = generate_email_token(email)
             confirm_url = url_for("routes.confirm_email", token=email_token, _external=True)
             html = render_template("auth_email.html", username=username, confirm_url=confirm_url)
-            subject = "Typing Test : Please confirm your email"
+            subject = "TPWRTR : Please confirm your email"
             # send_confirm_email(email, subject, html)
 
             user = Users.query.filter_by(username=username).first()
@@ -117,17 +117,90 @@ def results():
         return "failure"
     return redirect(url_for("routes.index"))
 
-@routes.route("/profile", methods=["GET"])
+@routes.route("/api/leaderboards")
+def leaderboards():
+    leaderboards = {
+        "15": {},
+        "60": {},
+    }
+    
+    for key in leaderboards:
+        query = leaderboards_query(key)
+        query_result = db.session.execute(query).fetchall()
+        n = 1
+        for row in query_result:
+            leaderboards[key][n] = {
+                "username": row[0],
+                "wpm": row[1],
+                "accuracy": row[2],
+                "timestamp": row[3]
+            }
+            n = n + 1
+
+    return jsonify(leaderboards)
+
+@routes.route("/api/profile")
 def profile():
     if not current_user.is_authenticated:
-        return redirect(url_for("routes.index")) 
-    username = current_user.username
-    return render_template("profile.html", is_logged_in=current_user.is_authenticated, username=username)
+        return redirect(url_for("routes.index"))
 
-@routes.route("/leaderboards")
-def leaderboards():
-    username = ""
-    if current_user.is_authenticated :
-        username = current_user.username
+    user_id = current_user.id
+    profile_info = {
+        "highscores": {
+            "time": {},
+            "words": {}
+        },
+        "stats": {
+            "tests": {},
+            "wpm": {},
+            "rawwpm": {},
+            "accuracy": {}
+        },
+        "history": {}
+    }
 
-    return render_template("leaderboards.html", is_logged_in=current_user.is_authenticated, username=username)
+    for key in profile_info["highscores"]:
+        query = highscores_query(user_id, key)
+        query_result = db.session.execute(query).fetchall()
+        for row in query_result:
+            profile_info["highscores"][key][row[0]] = row[1]
+
+    stats_test_states = ['completed', 'started']
+    for state in stats_test_states :
+        query = stats_tests_query(user_id, state)
+        query_result = db.session.execute(query).fetchall()
+        profile_info["stats"]["tests"][f"{state}"] = query_result[0][0]
+
+    stats_quantity = [0, 10] # 0 is configured to query all previous tests
+    for quantity in stats_quantity:
+        query = stats_query(user_id, quantity)
+        query_result = db.session.execute(query).fetchall()
+
+        profile_info["stats"]["wpm"][f"{quantity}"] = query_result[0][0]
+        profile_info["stats"]["rawwpm"][f"{quantity}"] = query_result[0][1]
+        profile_info["stats"]["accuracy"][f"{quantity}"] = query_result[0][2]
+
+    history_quantity = 25
+    query_history = history_query(user_id, history_quantity)
+    query_history_result = db.session.execute(query_history).fetchall()
+
+    n = 0
+    for row in query_history_result:
+        profile_info["history"][n] = {
+            "mode": row[0],
+            "language": row[1],
+            "time": row[2],
+            "words": row[3],
+            "wpm": row[4],
+            "rawwpm": row[5],
+            "accuracy": row[6],
+            "date": row[7],
+            "charsCorrectCorrectword": row[8],
+            "charsCorrectIncorrectword": row[9],
+            "charsIncorrect": row[10],
+            "charsExtra": row[11],
+            "charsMissed": row[12]
+        }
+        n = n + 1
+
+    return jsonify(profile_info)

@@ -1,3 +1,6 @@
+import { currentTest } from "../index"
+import * as input from "../test/input"
+
 export function initAuth() {
     authModalToggle()
     authFormSelector()
@@ -8,6 +11,10 @@ function authModalToggle() {
     const authMenuButton = document.querySelector(".register-login")
     const modal = authMenuButton?.parentElement?.querySelector(".modal")
     authMenuButton?.addEventListener("click", function() {
+        if (currentTest.testStats.state == "active") {
+            input.cancelTest(currentTest.testStats)
+            currentTest.resetTest()
+        }
         modal?.classList.add("active")
     })
     modal?.addEventListener("click", function(e) {

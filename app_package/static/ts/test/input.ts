@@ -258,7 +258,7 @@ export function completeTest(object: types.testStats) {
     showResults(object)
 }
 
-export function abortTest(object: types.testStats) {
+export function cancelTest(object: types.testStats) {
     activeChar = null;
 
     if (object.state == "active") {
