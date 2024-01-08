@@ -1,6 +1,6 @@
 # TPWRTR (Typing Test)
-### Video Demo: upcoming
-This is a typing test app that I made for fun and that tries to improve on other typing tests while providing a good user experience. The app's design and features are inspired by monkeytype.com, a famous typing test app.
+### Video Demo: https://youtu.be/Q87sCpCO8cM
+This is a typing test app that I made for fun and that tries to improve on other typing tests while providing a good user experience. The app's design and features are inspired by monkeytype.com, a famous typing test app. The app is not deployed online at the moment, but it is showcased in the short video linked above.
 
 
 ## Features
